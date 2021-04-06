@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 
 from utils.log import get_logger
-from yolov3_deepsort import VideoTracker
+from deepsort import VideoTracker
 from utils.parser import get_config
 
 import motmetrics as mm
