@@ -2,26 +2,33 @@ import os
 import numpy as np
 import copy
 import motmetrics as mm
-mm.lap.default_solver = 'lap'
-from utils.io import read_results, unzip_objs
+
+mm.lap.default_solver = "lap"
+from .io import read_results, unzip_objs
 
 
 class Evaluator(object):
-
-    def __init__(self, data_root, seq_name, data_type):
-        self.data_root = data_root
-        self.seq_name = seq_name
+    def __init__(self, data_type, gt_filename=None):
         self.data_type = data_type
-
-        self.load_annotations()
+        self.gt_frame_dict = None
+        self.gt_ignore_frame_dict = None
+        self.acc = None
+        self.load_annotations(gt_filename)
         self.reset_accumulator()
 
-    def load_annotations(self):
-        assert self.data_type == 'mot'
+    def load_annotations(self, gt_filename=None):
+        assert self.data_type == "mot"
 
-        gt_filename = os.path.join(self.data_root, self.seq_name, 'gt', 'gt.txt')
+        gt_filename = gt_filename or os.path.join(
+            self.data_root, self.seq_name, "gt", "gt.txt"
+        )
+        assert os.path.isfile(
+            gt_filename
+        ), f"No ground truth file found at {os.path.abspath(gt_filename)}"
         self.gt_frame_dict = read_results(gt_filename, self.data_type, is_gt=True)
-        self.gt_ignore_frame_dict = read_results(gt_filename, self.data_type, is_ignore=True)
+        self.gt_ignore_frame_dict = read_results(
+            gt_filename, self.data_type, is_ignore=True
+        )
 
     def reset_accumulator(self):
         self.acc = mm.MOTAccumulator(auto_id=True)
