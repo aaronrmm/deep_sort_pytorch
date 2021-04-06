@@ -1,4 +1,5 @@
 import os
+
 import cv2
 import time
 import argparse
@@ -8,7 +9,7 @@ import numpy as np
 import traceback
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'thirdparty/fast-reid'))
+sys.path.append(os.path.join(os.path.dirname(__file__), "thirdparty/fast-reid"))
 
 
 from detector import build_detector
@@ -94,8 +95,10 @@ class VideoTracker(object):
             self.save_results_path = os.path.join(self.args.save_path, "results.txt")
 
             # create video writer
-            fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-            self.writer = cv2.VideoWriter(self.save_video_path, fourcc, 20, (self.im_width, self.im_height))
+            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+            self.writer = cv2.VideoWriter(
+                self.save_video_path, fourcc, 20, (self.im_width, self.im_height)
+            )
 
             # logging
             self.logger.info("Save results to {}".format(self.args.save_path))
@@ -164,20 +167,29 @@ class VideoTracker(object):
                 self.writer.write(ori_im)
 
             # save results
-            write_results(self.save_results_path, results, 'mot')
+            write_results(self.save_results_path, results, "mot")
 
             # logging
-            self.logger.info("time: {:.03f}s, fps: {:.03f}, detection numbers: {}, tracking numbers: {}" \
-                             .format(end - start, 1 / (end - start), bbox_xywh.shape[0], len(outputs)))
+            self.logger.info(
+                "time: {:.03f}s, fps: {:.03f}, detection numbers: {}, tracking numbers: {}".format(
+                    end - start, 1 / (end - start), bbox_xywh.shape[0], len(outputs)
+                )
+            )
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("VIDEO_PATH", type=str)
-    parser.add_argument("--config_mmdetection", type=str, default="./configs/mmdet.yaml")
+    parser.add_argument(
+        "--config_mmdetection", type=str, default="./configs/mmdet.yaml"
+    )
     parser.add_argument("--config_detection", type=str, default="./configs/yolov3.yaml")
-    parser.add_argument("--config_deepsort", type=str, default="./configs/deep_sort.yaml")
-    parser.add_argument("--config_fastreid", type=str, default="./configs/fastreid.yaml")
+    parser.add_argument(
+        "--config_deepsort", type=str, default="./configs/deep_sort.yaml"
+    )
+    parser.add_argument(
+        "--config_fastreid", type=str, default="./configs/fastreid.yaml"
+    )
     parser.add_argument("--fastreid", action="store_true")
     parser.add_argument("--mmdet", action="store_true")
     # parser.add_argument("--ignore_display", dest="display", action="store_false", default=True)
