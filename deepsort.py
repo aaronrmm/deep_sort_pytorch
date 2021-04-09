@@ -134,13 +134,8 @@ class VideoTracker(object):
             # do detection
             bbox_xywh, cls_conf, cls_ids = self.detector(im)
 
-            # select person class
-            mask = cls_ids == 0
-
-            bbox_xywh = bbox_xywh[mask]
             # bbox dilation just in case bbox too small, delete this line if using a better pedestrian detector
             bbox_xywh[:, 3:] *= 1.2
-            cls_conf = cls_conf[mask]
 
             # do tracking
             outputs = self.deepsort.update(bbox_xywh, cls_conf, im)
