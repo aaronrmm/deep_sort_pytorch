@@ -32,7 +32,7 @@ class YOLOv3(object):
 
     def __call__(self, ori_img):
         # img to tensor
-        assert isinstance(ori_img, np.ndarray), "input must be a numpy array!"
+        assert isinstance(ori_img, np.ndarray), f"input must be a numpy array, but is type {type(ori_img)}"
         img = ori_img.astype(np.float) / 255.
 
         img = cv2.resize(img, self.size)
