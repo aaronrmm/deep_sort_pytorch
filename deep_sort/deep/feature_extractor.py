@@ -5,9 +5,6 @@ import cv2
 import logging
 
 from .model import Net
-from fastreid.config import get_cfg
-from fastreid.engine import DefaultTrainer
-from fastreid.utils.checkpoint import Checkpointer
 
 class Extractor(object):
     def __init__(self, model_path, use_cuda=True):
@@ -51,6 +48,9 @@ class Extractor(object):
 
 class FastReIDExtractor(object):
     def __init__(self, model_config, model_path, use_cuda=True):
+        from fastreid.config import get_cfg
+        from fastreid.engine import DefaultTrainer
+        from fastreid.utils.checkpoint import Checkpointer
         cfg = get_cfg()
         cfg.merge_from_file(model_config)
         cfg.MODEL.BACKBONE.PRETRAIN = False
